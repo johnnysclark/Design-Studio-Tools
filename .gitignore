@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.eggs/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+.env
+.envrc
+
+# uv
+# uv.lock is committed
+
+# Tool outputs
+dossier_output/
+*.3dm.bak
+*.pdf
+!docs/**/*.pdf
+!packages/*/tests/fixtures/**/*.pdf
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp

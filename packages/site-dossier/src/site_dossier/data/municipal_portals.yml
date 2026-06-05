@@ -1,0 +1,40 @@
+# Registry of municipal zoning data portals.
+# Each entry: id, name, match (list of admin1/admin2 names as Nominatim returns them),
+# url (templated with {lat}, {lon}), code_field, optional description_field.
+#
+# Adding a new city: append an entry here and add a fixture test in tests/test_fetchers_zoning.py.
+
+- id: nyc
+  name: NYC Department of City Planning (ZoLa)
+  match: ["New York County", "Kings County", "Queens County", "Bronx County", "Richmond County", "New York City"]
+  url: "https://data.cityofnewyork.us/resource/8br9-z9pe.json?$where=within_circle(the_geom,{lat},{lon},50)"
+  code_field: zonedist1
+  description_field: overlay1
+
+- id: chicago
+  name: City of Chicago Data Portal (Zoning Districts)
+  match: ["Cook County", "Chicago"]
+  url: "https://data.cityofchicago.org/resource/dj47-wfun.json?$where=within_circle(the_geom,{lat},{lon},50)"
+  code_field: zone_class
+  description_field: zone_type
+
+- id: sf
+  name: DataSF (Zoning Districts)
+  match: ["San Francisco County", "San Francisco"]
+  url: "https://data.sfgov.org/resource/3i4q-bnzn.json?$where=within_circle(the_geom,{lat},{lon},50)"
+  code_field: zoning_sim
+  description_field: districtname
+
+- id: boston
+  name: Analyze Boston (Zoning Subdistricts)
+  match: ["Suffolk County", "Boston"]
+  url: "https://data.boston.gov/api/3/action/datastore_search?resource_id=04ba903a-30b8-4ab2-9e00-9d8e3a0c1d4b&limit=1"
+  code_field: ZONE_
+  description_field: SUBDISTRIC
+
+- id: seattle
+  name: Seattle Open Data (Zoning)
+  match: ["King County", "Seattle"]
+  url: "https://data.seattle.gov/resource/k8sg-7nuy.json?$where=within_circle(the_geom,{lat},{lon},50)"
+  code_field: zoning
+  description_field: zoning_description

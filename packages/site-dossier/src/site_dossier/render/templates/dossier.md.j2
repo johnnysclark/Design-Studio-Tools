@@ -1,0 +1,160 @@
+# Site Dossier: {{ site.display_name }}
+
+> **Summary for screen readers:** {{ summary }}
+
+**Generated** {{ generated_at.strftime('%Y-%m-%d %H:%M UTC') }}
+**Coordinates** {{ "%.5f"|format(site.lat) }}, {{ "%.5f"|format(site.lon) }}{% if site.elevation_m %} · **Elevation** {{ site.elevation_m|round|int }} m{% endif %}
+{% if site.country %}**Jurisdiction** {{ site.admin2 or '' }}{% if site.admin2 and site.admin1 %}, {% endif %}{{ site.admin1 or '' }}{% if (site.admin1 or site.admin2) and site.country %}, {% endif %}{{ site.country }}{% endif %}
+
+---
+
+## 1. Location
+
+- **Display name**: {{ site.display_name }}
+{% if site.address %}- **Address**: {{ site.address }}
+{% endif %}- **Latitude / Longitude**: {{ "%.5f"|format(site.lat) }}, {{ "%.5f"|format(site.lon) }}
+{% if site.admin2 %}- **Administrative area 2**: {{ site.admin2 }}
+{% endif %}{% if site.admin1 %}- **Administrative area 1**: {{ site.admin1 }}
+{% endif %}{% if site.country %}- **Country**: {{ site.country }}{% if site.country_code %} ({{ site.country_code }}){% endif %}
+{% endif %}- **Geocoding source**: {{ site.source }}
+
+## 2. Climate normals (1991-2020)
+
+{% if climate.status == 'ok' and climate.data %}
+{% if 'climograph' in chart_relpaths %}
+![{{ alts.climograph }}]({{ chart_relpaths.climograph }})
+
+{% endif %}
+| Month | Mean low (°C) | Mean high (°C) | Mean (°C) | Precip (mm) |
+|---|---:|---:|---:|---:|
+{% for m in climate.data.monthly %}| {{ m.month|month_abbr }} | {{ m.tmin_mean_c if m.tmin_mean_c is not none else '—' }} | {{ m.tmax_mean_c if m.tmax_mean_c is not none else '—' }} | {{ m.tmean_c if m.tmean_c is not none else '—' }} | {{ m.precip_sum_mm if m.precip_sum_mm is not none else '—' }} |
+{% endfor %}
+
+**Annual summary**
+
+- Mean annual temperature: **{{ climate.data.annual.mean_temp_c }} °C**
+- Total annual precipitation: **{{ climate.data.annual.annual_precip_mm }} mm**
+- Warmest month: **{{ climate.data.annual.warmest_month|month_name }}** ({{ climate.data.annual.warmest_month_tmean_c }} °C)
+- Coldest month: **{{ climate.data.annual.coldest_month|month_name }}** ({{ climate.data.annual.coldest_month_tmean_c }} °C)
+
+*Source: {{ climate.source }}.*
+{% else %}
+> **Section unavailable.** {{ climate.notes|join('; ') if climate.notes else 'No climate data could be retrieved.' }}
+{% endif %}
+
+## 3. Sun path
+
+{% if sun.status == 'ok' and sun.data %}
+{% if 'sun_path' in chart_relpaths %}
+![{{ alts.sun_path }}]({{ chart_relpaths.sun_path }})
+
+{% endif %}
+| Key day | Sunrise (UTC) | Sunset (UTC) | Max altitude | Azimuth at max |
+|---|---|---|---:|---:|
+{% for key, ss in sun.data.sunrise_sunset.items() %}| {{ key.replace('_', ' ')|title }} | {{ ss.sunrise_utc or '—' }} | {{ ss.sunset_utc or '—' }} | {{ ss.max_altitude_deg }}° | {{ ss.max_alt_azimuth_deg if ss.max_alt_azimuth_deg is not none else '—' }}° |
+{% endfor %}
+
+*Source: {{ sun.source }}.*
+{% else %}
+> **Section unavailable.** {{ sun.notes|join('; ') if sun.notes else 'Sun path could not be computed.' }}
+{% endif %}
+
+## 4. Prevailing winds
+
+{% if wind.status == 'ok' and wind.data %}
+{% if 'wind_rose' in chart_relpaths %}
+![{{ alts.wind_rose }}]({{ chart_relpaths.wind_rose }})
+
+{% endif %}
+- Prevailing direction: **{{ wind.data.prevailing_dir_cardinal }}** ({{ wind.data.prevailing_dir_deg }}°), {{ wind.data.prevailing_dir_pct }}% of hours
+- Mean wind speed: **{{ wind.data.mean_speed_mps }} m/s**
+- Calm percentage: **{{ wind.data.calm_pct }}%**
+- Total hours analyzed: {{ "{:,}".format(wind.data.total_hours) }}
+
+*Source: {{ wind.source }}.*
+{% else %}
+> **Section unavailable.** {{ wind.notes|join('; ') if wind.notes else 'No hourly wind data could be retrieved.' }}
+{% endif %}
+
+## 5. Demographics
+
+{% if demographics.status in ('ok', 'partial') and demographics.data %}
+{% set dd = demographics.data %}
+{% if dd.tract_name %}**Census tract**: {{ dd.tract_name }}{% endif %}
+
+{% if dd.total_population is defined %}
+- Total population: **{% if dd.total_population is not none %}{{ "{:,}".format(dd.total_population|int) }}{% else %}—{% endif %}**
+{% endif %}
+{% if dd.median_household_income_usd is defined %}
+- Median household income: **{% if dd.median_household_income_usd is not none %}${{ "{:,}".format(dd.median_household_income_usd|int) }}{% else %}—{% endif %}**
+{% endif %}
+{% if dd.median_home_value_usd is defined %}
+- Median home value: **{% if dd.median_home_value_usd is not none %}${{ "{:,}".format(dd.median_home_value_usd|int) }}{% else %}—{% endif %}**
+{% endif %}
+{% if dd.median_gross_rent_usd is defined %}
+- Median gross rent: **{% if dd.median_gross_rent_usd is not none %}${{ "{:,}".format(dd.median_gross_rent_usd|int) }}{% else %}—{% endif %}**
+{% endif %}
+{% if dd.gdp_per_capita_usd is defined %}
+- GDP per capita: **${{ "{:,}".format(dd.gdp_per_capita_usd|int) }}** ({{ dd.gdp_per_capita_usd_year }})
+{% endif %}
+{% if dd.urban_population_pct is defined %}
+- Urban population: **{{ dd.urban_population_pct|round(1) }}%** ({{ dd.urban_population_pct_year }})
+{% endif %}
+
+*Source: {{ demographics.source }}.*
+{% if demographics.notes %}
+{% for n in demographics.notes %}> {{ n }}
+{% endfor %}{% endif %}
+{% else %}
+> **Section unavailable.** {{ demographics.notes|join('; ') if demographics.notes else 'No demographic data could be retrieved.' }}
+{% endif %}
+
+## 6. Zoning & land use
+
+{% if zoning.status in ('ok', 'partial') and zoning.data %}
+{% set zd = zoning.data %}
+{% if zd.zoning_code %}
+- **Zoning code**: {{ zd.zoning_code }}
+{% if zd.description %}- **Description**: {{ zd.description }}
+{% endif %}- **Source portal**: {{ zd.portal }}
+- **Query URL**: <{{ zd.query_url }}>
+{% elif zd.landuse %}
+- **OpenStreetMap landuse tag**: `{{ zd.landuse }}` (50 m radius)
+{% elif zd.search_query %}
+- No municipal portal is registered for **{{ zd.locality }}** and no OSM landuse was found.
+- Suggested search: [`{{ zd.search_query }}`]({{ zd.search_url }})
+{% endif %}
+
+*Source: {{ zoning.source }}.*
+{% if zoning.notes %}
+{% for n in zoning.notes %}> {{ n }}
+{% endfor %}{% endif %}
+{% else %}
+> **Section unavailable.** {{ zoning.notes|join('; ') if zoning.notes else 'No zoning information could be retrieved.' }}
+{% endif %}
+
+## 7. Rhino sidecar
+
+This dossier ships with a `dossier.3dm` sidecar in the same output folder. Drag it into your Rhino model to drop the following geometry at the site origin (units: meters):
+
+- **Layer `Site`** — site point, address/coords text dot.
+- **Layer `Sun_Paths`** — one polyline per key day (summer solstice, winter solstice, equinoxes), traced as sun-vector tips on a 10 m sphere.
+- **Layer `Wind_Rose`** — 16 radial spokes scaled to a 20 m base; spoke length is proportional to the share of hours blowing from that sector.
+- **Layer `Annotations`** — true-north arrow on +Y, cardinal labels (N/E/S/W).
+
+A `sun_wind_hourly.csv` is also written next to the `.3dm` with Ladybug-compatible columns so you can pipe the raw hourly data into Grasshopper.
+
+## 8. Notes & data quality
+
+{% set degraded = [] %}
+{% for name, sec in [('climate', climate), ('wind', wind), ('sun', sun), ('demographics', demographics), ('zoning', zoning)] %}
+{% if sec.status != 'ok' %}
+- **{{ name|title }}** — status: *{{ sec.status }}*. {{ sec.notes|join('; ') }}
+{% endif %}
+{% endfor %}
+
+All retrieved data is preserved alongside this report as `data.json` for reproducibility.
+
+---
+
+*Generated by `site-dossier` from the [Design Studio Tools](https://github.com/johnnysclark/Design-Studio-Tools) kit. Open-Meteo, OpenStreetMap / Nominatim, US Census Bureau, FCC, World Bank, and municipal data portals cited inline.*

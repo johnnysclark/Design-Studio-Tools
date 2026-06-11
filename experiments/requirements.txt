@@ -1,0 +1,33 @@
+# Probe dependencies for the possibility-map experiments.
+# These are intentionally kept OUT of the uv workspace lock (pyproject/uv.lock) so the
+# production kit (ds-common, site-dossier) stays clean. Install into an isolated venv:
+#
+#   uv venv experiments/.venv --python 3.11
+#   uv pip install --python experiments/.venv/bin/python -r experiments/requirements.txt
+#
+# Versions are those actually used to produce the recorded results (CPU-only Linux).
+
+# form-finding / thrust networks (01)
+compas==2.15.1
+compas_fd==0.5.4
+# SMT spatial proofs (02)
+z3-solver==4.16.0.0
+# differentiable design (08)
+jax==0.10.1
+# acoustics (05)
+pyroomacoustics==0.10.1
+# cutting-stock / nesting (06)
+ortools==9.15.6755
+rectpack==0.2.2
+# geometry / plotting / IO used across probes (03,04,07,09,10)
+shapely==2.1.2
+rhino3dm==8.17.0
+numpy==2.4.6
+scipy==1.17.1
+matplotlib==3.10.9
+networkx==3.6.1
+# Claude Fable 5 design-participant probes (14,15,16). The headless research container has no
+# API key (auth is the harness's OAuth descriptor), so the live Fable calls run on YOUR
+# machine with ANTHROPIC_API_KEY set. The z3 proof in 15 reproduces offline from the captured
+# fable_program.json, so it needs no key.
+anthropic>=0.69

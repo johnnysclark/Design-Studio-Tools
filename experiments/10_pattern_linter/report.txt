@@ -1,0 +1,26 @@
+========================================================================
+PATTERN LINTER  --  A Pattern Language as a running architectural critic
+========================================================================
+Model: 9 rooms, entry = 'Entry', 8 connections
+
+[FAIL] #159 Light on Two Sides of Every Room
+        Habitable rooms lit from <2 sides (gloomy): ['Study', 'MasterBed']
+
+[PASS] #105 South Facing Outdoors (daylight)
+        Main living spaces face south for daylight.
+
+[FAIL] #127 Intimacy Gradient
+        Private rooms adjacent to entry (no intimacy gradient): ['MasterBed']
+
+[FAIL] #131 The Flow Through Rooms
+        Habitable rooms act as sole corridor to others (no flow): ['Kitchen', 'Living', 'Study']
+
+[FAIL] #109 Long Thin House (aspect sanity)
+        Rooms with extreme aspect ratio (>3:1), hard to inhabit: ['Gallery']
+
+[PASS] #61 Humane Room Size vs Occupancy
+        All rooms give each occupant humane floor area.
+
+------------------------------------------------------------------------
+SUMMARY: 2 PASS / 0 WARN / 4 FAIL   ->   compliance score 33/100
+------------------------------------------------------------------------

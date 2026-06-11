@@ -31,5 +31,6 @@ run 10_pattern_linter pattern_linter.py
 run 14_fable_critic        fable_critic.py
 run 15_fable_program_proof program_to_proof.py
 run 16_serial_vision       serial_vision.py
+run 17_closed_loop         closed_loop.py
 
 echo; echo "All probes attempted. See each folder's README.md for recorded results."

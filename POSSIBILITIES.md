@@ -70,15 +70,16 @@ possible" — it's "is it packaged."
 | 14 | Fable 5 experiential critic (jury before the jury) | Executable theory | C | **ALIVE** | geometry-grounded critique (real transcript) |
 | 15 | NL brief → program (Fable) → z3 **proof** | New epistemology | C+B | **ALIVE** | Fable program proven UNSAT; conflict localized |
 | 16 | Serial vision — Fable narrates path as time | Experience & time | C | **ALIVE** | isovist-driven sequence + critique (real transcript) |
+| 17 | Closed loop: generate→prove→**revise**→re-prove | New epistemology | C+B | **ALIVE** | UNSAT→repair→SAT, `solved_plan.png` |
 | 11 | Thrust-network **optimization** w/ stability (`compas_tno`) | Form & structure | A | **BLOCKED** | PyPI 0.3.0 missing `diagrams`/`shapes` |
 | 12 | Graph→floorplan synthesis (House-GAN/diffusion) | Generative w/ rigor | — | **BLOCKED** | GPU; no PyPI package |
 | 13 | Gaussian-splat site capture | Drawing & capture | — | **BLOCKED** | GPU + CUDA + phone scan |
 
-**13 ALIVE** (target was ≥5), **3 BLOCKED**, 0 DEAD-on-idea. The BLOCKED threads are
+**14 ALIVE** (target was ≥5), **3 BLOCKED**, 0 DEAD-on-idea. The BLOCKED threads are
 unblockable on *your* Windows+NVIDIA box or by a git install — none are dead ends. Threads
-14–16 are **Kind C** (Claude Fable 5 as a participant): the *capability* is validated with
+14–17 are **Kind C** (Claude Fable 5 as a participant): the *capability* is validated with
 real transcripts; only the live API call is blocked in the headless container (no key), and
-runs on your machine. Thread 15's z3 proof reproduces offline.
+runs on your machine. The z3 proofs in 15 and 17 reproduce offline.
 
 ---
 
@@ -224,6 +225,55 @@ at a moment; 16 judges its rhythm in time. Real transcript in the README.
 *Open:* isovist area is one scalar (no height/light/material/sound); richer per-station
 features and wiring thread 07's real sweep into the path are the next step.
 
+### 17 · Closed loop — generate → prove → **revise** → re-prove — ALIVE (Kind C+B) ⭐⭐
+`experiments/17_closed_loop/` · `claude-fable-5` + `z3` 4.16 · `solved_plan.png`
+The headline. Fable's thread-15 program was proven UNSAT; the **proof was fed back to Fable**,
+which repaired it; z3 then proved the repair **feasible** — a real plan. The repair is design
+reasoning *driven by the proof*: z3's ablation said "the adjacency graph is the bind," Fable
+diagnosed the mechanism ("a short stub hall trying to touch three rooms at once") and made the
+architect's move — turned the stub into a **full-depth circulation spine** every room opens
+onto, *strengthening* step-free access (added an adjacency) rather than amputating one. z3
+certified it: `UNSAT → repair → SAT`, independent overlap check PASS. Neither half could do
+this alone — the solver proves but can't design; the model designs but ships latent
+contradictions (thread 15). Chained, the model proposes and the proof keeps it honest, and the
+proof's *explanation* makes the repair targeted.
+*Open:* generalizes to N rounds; harder briefs may need several (or prove genuinely
+impossible — itself a useful verdict). Rigid-rectangle model is the same conservative proxy
+as thread 15.
+
+---
+
+## Cycle 3 brainstorm — the Fable-composition space now open
+
+Building 14–17 made one thing obvious: **the model is a universal adapter between language
+and every rigorous tool already in the map.** That opens a whole class of "X → Fable →
+verifier" and "generator → Fable-critic" threads, none of which existed before this cycle.
+The richest, in rough priority (untested unless noted):
+
+- **Zoning-ordinance prose → z3 constraints → compliance proof** (Kind C+B, on the seed list).
+  Fable reads real ordinance text (setbacks, FAR, height, daylight planes) and emits z3
+  constraints; the solver then *proves* a massing compliant — or proves a lot **un-buildable**
+  under its own code. The thread-15 pattern (language → checkable formal object) pointed
+  straight at law. The single highest-value untested thread.
+- **Fable authors the differentiable objective** (Kind C × thread 08). A verbal intent ("shelter
+  the south terrace but let winter sun in") → a weighted objective spec → thread 08's JAX
+  gradient descent solves it. Language → loss → flow; the model writes the objective, the
+  optimizer obeys it. Different briefs should yield visibly different solved forms.
+- **Adversarial critic vs the optimizer** (Kind C × thread 08). Run the differentiable canopy,
+  then have Fable *attack* that exact geometry to find the one failure most likely to sink it
+  at a jury — and feed that back as a learned loss term. Makes thread 14 adversarial.
+- **Exhaustive catalog × learned taste** (Kind C × Steadman). Enumerate every small plan
+  (morphospace, queued below), then have Fable *curate* the catalog — rank by design quality,
+  cluster by character. Pairs a new epistemology (exhaustive proof-by-enumeration) with the
+  one thing enumeration lacks: judgement.
+- **Semantic model querying** (Kind C). Natural-language questions over a structured building
+  model — "which rooms get morning light *and* sit ≥2 doors from the entry?" — translated by
+  Fable into calls on the analysis stack (07 isovist, 10 graph, 02 solver). A conversational
+  front-end to the whole kit.
+- **Multi-critic jury** (Kind C × 02 × 07 × 10). Fable proposes; the offline linter (10), the
+  SMT solver (02), and the isovist field (07) each return a verdict; Fable synthesizes the
+  cross-examination into one scored review. The pipeline's "evaluate" node, fully wired.
+
 ---
 
 ## BLOCKED threads (and exactly what unblocks them)
@@ -302,6 +352,14 @@ Honest backlog — chosen *not* to spend cycles here yet, not judged dead:
    localizing the conflict to its adjacency graph). The lesson is sharp: a learned generator is
    most valuable **chained to a formal verifier**. Fable's prose program looked fine; the prover
    caught what prose hides. Generation + proof beats either alone — that's the cycle's headline.
+7. **The loop closed (thread 17), and the proof's *explanation* is the active ingredient.** It
+   wasn't enough for z3 to say "impossible" — it said *which* requirements collided, and that
+   localized verdict is what let Fable make a targeted architectural repair (stub hall → full
+   spine) instead of flailing. A bare SAT/UNSAT bit would not have been enough; the unsat core
+   is what turns a solver into a design partner. The deepest shift the whole map records: the
+   model is now a **universal adapter between language and every rigorous tool already here** —
+   which is why cycle 3's brainstorm (zoning prose → proof, language → loss, catalog → taste)
+   is suddenly a whole *class* of buildable threads, not a few one-offs.
 
 ---
 
@@ -338,17 +396,20 @@ the **full pipeline that chains them** — a design loop where learned generatio
 gradient, and simulation are all first-class, the model proposing and the formal tools
 disposing. That, more than any single tool, is what just became possible for one person.
 
-**The most alive thread now (cycle 2):** **Fable-generates / formal-method-proves (15).** It
-is the whole thesis of the map in one probe — a frontier model turns language into a checkable
-artifact, and a solver tells it the truth. Neither half is new; *chaining* them, headless, in
-an afternoon, by one person, is. Start the next cycle by closing the loop: feed z3's unsat core
-back to Fable and have it repair its own program — generate → prove → critique → **revise**.
+**The most alive thread now:** **the closed loop (17).** Cycle 2 found the thesis — a frontier
+model turns language into a checkable artifact and a solver tells it the truth (15) — and cycle
+3 *closed* it: the solver's proof feeds back, the model repairs, the solver re-certifies
+(`UNSAT → SAT`). It is the whole map in one probe — intuition and proof correcting each other
+in seconds, headless, by one person. Neither half is new; chaining them into a self-correcting
+dialogue is. Everything in the cycle-3 brainstorm is a variation on this single live mechanic.
 
 ---
 
-*Map status: open. 13 ALIVE (10 headless + 3 Fable-participant), 3 BLOCKED, a queued backlog.
-Cycle 1 mapped the headless frontier; cycle 2 added Kind C (Claude Fable 5 as critic,
-program-generator, and narrator) and built the first live edge (Fable → z3). Clear next cycle:
-close the generate→prove→critique→**revise** loop (feed z3's unsat core back to Fable); wire
-thread 07's real isovists into thread 16; build the Steadman enumerator; git-install
-`compas_tno`. Updated as the exploration continues.*
+*Map status: open. 14 ALIVE (10 headless + 4 Fable-participant), 3 BLOCKED, an expanding
+brainstorm. Cycle 1 mapped the headless frontier; cycle 2 added Kind C (Claude Fable 5 as
+critic, program-generator, narrator) and built the first live edge (Fable → z3); cycle 3
+**closed the loop** (generate → prove → revise → re-prove, `UNSAT → SAT`) and opened a whole
+class of language→verifier compositions. Clear next cycle: zoning prose → z3 compliance proof;
+Fable authors a thread-08 differentiable loss from a verbal brief; wire thread 07's real
+isovists into 16; build the Steadman enumerator + Fable curator; git-install `compas_tno`.
+Updated as the exploration continues.*

@@ -26,4 +26,10 @@ run 08_differentiable diff_design.py
 run 09_shape_grammar  shape_grammar.py
 run 10_pattern_linter pattern_linter.py
 
+# Claude Fable 5 design-participant probes. 15's z3 proof reproduces offline from the captured
+# program; 14 and 16 make live Fable calls and degrade gracefully without ANTHROPIC_API_KEY.
+run 14_fable_critic        fable_critic.py
+run 15_fable_program_proof program_to_proof.py
+run 16_serial_vision       serial_vision.py
+
 echo; echo "All probes attempted. See each folder's README.md for recorded results."

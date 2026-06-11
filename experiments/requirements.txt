@@ -26,3 +26,8 @@ numpy==2.4.6
 scipy==1.17.1
 matplotlib==3.10.9
 networkx==3.6.1
+# Claude Fable 5 design-participant probes (14,15,16). The headless research container has no
+# API key (auth is the harness's OAuth descriptor), so the live Fable calls run on YOUR
+# machine with ANTHROPIC_API_KEY set. The z3 proof in 15 reproduces offline from the captured
+# fable_program.json, so it needs no key.
+anthropic>=0.69

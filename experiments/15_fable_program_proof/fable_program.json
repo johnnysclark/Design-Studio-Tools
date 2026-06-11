@@ -1,0 +1,15 @@
+{
+  "envelope": {"width": 8, "depth": 6},
+  "rooms": [
+    {"name": "bedroom",      "min_w": 3.5, "min_d": 3.0, "needs_window": ["S"],     "function": "habitable",   "occupancy": 1},
+    {"name": "bathroom",     "min_w": 2.5, "min_d": 2.5, "needs_window": [],        "function": "service",     "occupancy": 1},
+    {"name": "kitchenette",  "min_w": 2.5, "min_d": 2.0, "needs_window": ["N"],     "function": "service",     "occupancy": 1},
+    {"name": "sitting_area", "min_w": 3.5, "min_d": 3.0, "needs_window": ["E", "S"], "function": "habitable",  "occupancy": 2},
+    {"name": "hall",         "min_w": 1.5, "min_d": 3.5, "needs_window": [],        "function": "circulation", "occupancy": 0}
+  ],
+  "adjacencies": [
+    ["hall", "bedroom"], ["hall", "bathroom"], ["hall", "sitting_area"],
+    ["bedroom", "bathroom"], ["sitting_area", "kitchenette"]
+  ],
+  "rationale": "Walker use drives a 2.5x2.5 bathroom (1.5 m turning circle plus fixtures) adjacent to the bedroom, and a 1.5 m-wide step-free hall linking all rooms. Morning reading puts the sitting area on E/S glazing; kitchenette opens off it for sociable cooking. Sizes are modest-but-generous to read cosy, not cramped, within 8x6 m."
+}
